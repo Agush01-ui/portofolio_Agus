@@ -606,21 +606,47 @@
       <span class="lang en">Contact</span>
       <span class="lang id hidden">Kontak</span>
     </h3>
+
     <div class="flex justify-center gap-6">
-      <a href="mailto:example@email.com" class="p-3 bg-cyan-500/20 rounded-full hover:bg-cyan-500/30 transition">
-        <i data-lucide="mail"></i>
-      </a>
-      <a href="https://github.com" target="_blank" class="p-3 bg-cyan-500/20 rounded-full hover:bg-cyan-500/30 transition">
+
+  <!-- EMAIL ICON -->
+<div class="relative flex justify-center">
+  <button onclick="toggleEmail()" 
+    class="p-3 bg-cyan-500/20 rounded-full hover:bg-cyan-500/30 transition">
+    <i data-lucide="mail"></i>
+  </button>
+
+  <!-- POPUP EMAIL -->
+  <div id="emailBox"
+       class="absolute bottom-16 bg-slate-900 text-cyan-300 px-4 py-2 rounded-lg shadow-lg opacity-0 scale-90 transition-all duration-300 pointer-events-none">
+    agushamzahsaputra16@gmail.com
+  </div>
+</div>
+
+
+      <!-- GITHUB -->
+      <a href="https://github.com/Agush01-ui" target="_blank"
+         class="p-3 bg-cyan-500/20 rounded-full hover:bg-cyan-500/30 transition">
         <i data-lucide="github"></i>
       </a>
-      <a href="https://linkedin.com" target="_blank" class="p-3 bg-cyan-500/20 rounded-full hover:bg-cyan-500/30 transition">
+
+      <!-- LINKEDIN -->
+      <a href="https://linkedin.com/in/agus-saputra-hamzah-0809702ab" target="_blank"
+         class="p-3 bg-cyan-500/20 rounded-full hover:bg-cyan-500/30 transition">
         <i data-lucide="linkedin"></i>
       </a>
+
     </div>
-    <p class="mt-6 text-gray-300 lang en">Feel free to reach out for collaboration or opportunities!</p>
-    <p class="mt-6 text-gray-300 lang id hidden">Jangan ragu untuk menghubungi untuk kolaborasi atau peluang!</p>
+
+    <p class="mt-6 text-gray-300 lang en">
+      Feel free to reach out for collaboration or opportunities!
+    </p>
+    <p class="mt-6 text-gray-300 lang id hidden">
+      Jangan ragu untuk menghubungi untuk kolaborasi atau peluang!
+    </p>
   </div>
 </section>
+
 
 <script>
 lucide.createIcons();
@@ -783,6 +809,14 @@ function setLang(lang) {
   // Close dropdown
   langDropdown.classList.remove('show');
 }
+
+function toggleEmail() {
+  const box = document.getElementById("emailBox");
+  box.classList.toggle("opacity-0");
+  box.classList.toggle("scale-90");
+  box.classList.toggle("pointer-events-none");
+}
+
 
 // Initialize with English
 setLang('en');
