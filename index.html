@@ -8,6 +8,7 @@
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="https://unpkg.com/lucide@latest"></script>
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script src="https://mozilla.github.io/pdf.js/build/pdf.js"></script>
 
   <style>
     body {
@@ -243,7 +244,278 @@
       font-size: 24px;
       z-index: 1001;
     }
-  </style>
+
+  /* FIX TOOLTIP WIDTH AND OVERFLOW */
+.workflow-step .glass {
+  min-width: 260px;
+  max-width: 280px;
+  word-wrap: break-word;
+  white-space: normal;
+}
+
+/* Ensure tooltip doesn't get cut off on edges */
+@media (min-width: 768px) {
+  .workflow-step:first-child .glass {
+    left: 0;
+    transform: translateX(0);
+  }
+  
+  .workflow-step:last-child .glass {
+    left: auto;
+    right: 0;
+    transform: translateX(0);
+  }
+}
+
+/* Improve mobile text wrapping */
+.workflow-card p {
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+  hyphens: auto;
+}
+
+/* Better spacing for mobile */
+@media (max-width: 767px) {
+  .workflow-card {
+    padding: 1rem !important;
+  }
+  
+  .workflow-card .pr-16 {
+    padding-right: 4rem;
+  }
+  
+  .workflow-card .absolute {
+    width: 2.5rem;
+    height: 2.5rem;
+    top: 1rem;
+    right: 1rem;
+  }
+}
+
+/* PDF Modal Specific Styles */
+#pdfModal .modal-content {
+  display: flex;
+  flex-direction: column;
+}
+
+/* Fullscreen mode */
+#pdfViewer:-webkit-full-screen {
+  width: 100%;
+  height: 100%;
+  border: none;
+  border-radius: 0;
+}
+
+#pdfViewer:-moz-full-screen {
+  width: 100%;
+  height: 100%;
+  border: none;
+  border-radius: 0;
+}
+
+#pdfViewer:-ms-fullscreen {
+  width: 100%;
+  height: 100%;
+  border: none;
+  border-radius: 0;
+}
+
+#pdfViewer:fullscreen {
+  width: 100%;
+  height: 100%;
+  border: none;
+  border-radius: 0;
+}
+
+/* PDF loading state */
+.pdf-loading {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+}
+
+.pdf-loading::after {
+  content: 'Loading PDF...';
+  color: #94a3b8;
+  font-size: 1.1rem;
+  animation: pulse 1.5s infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 0.5; }
+  50% { opacity: 1; }
+}
+
+/* CHART ENHANCEMENTS */
+.chart-type-btn {
+  background: transparent;
+  color: #94a3b8;
+  transition: all 0.3s ease;
+}
+
+.chart-type-btn:hover {
+  background: rgba(34, 211, 238, 0.1);
+  color: #22d3ee;
+}
+
+.chart-type-btn.active-chart {
+  background: rgba(34, 211, 238, 0.2);
+  color: #22d3ee;
+  box-shadow: 0 0 10px rgba(34, 211, 238, 0.3);
+}
+
+/* Tool item hover effects */
+.tool-item {
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+  overflow: hidden;
+}
+
+.tool-item::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.05), transparent);
+  transition: left 0.7s ease;
+}
+
+.tool-item:hover::before {
+  left: 100%;
+}
+
+.tool-item:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+}
+
+/* Progress bar animation */
+.tool-item .h-3 {
+  transition: width 1s ease-in-out;
+}
+
+/* Responsive adjustments */
+@media (max-width: 1024px) {
+  .grid.lg\\:grid-cols-2 {
+    grid-template-columns: 1fr;
+    gap: 3rem;
+  }
+  
+  .relative.h-80 {
+    height: 300px;
+  }
+}
+
+@media (max-width: 640px) {
+  .relative.h-80 {
+    height: 250px;
+  }
+  
+  .flex.justify-between.items-center.mb-6 {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1rem;
+  }
+  
+  .glass.rounded-lg.p-1 {
+    align-self: flex-end;
+  }
+}
+
+/* Projects Specific Styles */
+#dashboardModal .modal-content,
+#reportModal .modal-content {
+  display: flex;
+  flex-direction: column;
+}
+
+/* Dashboard preview mockup styling */
+.bg-gradient-to-br .grid {
+  animation: fadeInUp 0.8s ease;
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Projects Specific Styles */
+#dashboardModal .modal-content,
+#reportModal .modal-content {
+  display: flex;
+  flex-direction: column;
+}
+
+/* Dashboard preview mockup styling */
+.bg-gradient-to-br .grid {
+  animation: fadeInUp 0.8s ease;
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Project card hover effects */
+.glass.hover\:scale-\[1\.02\] {
+  transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Responsive adjustments for projects */
+@media (max-width: 1024px) {
+  .glass.rounded-2xl .grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .glass.p-8 {
+    padding: 1.5rem;
+  }
+}
+
+@media (max-width: 640px) {
+  .flex.flex-wrap.gap-4 {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  
+  .flex.flex-wrap.gap-4 a,
+  .flex.flex-wrap.gap-4 button {
+    width: 100%;
+    justify-content: center;
+  }
+}
+
+/* Smooth scrolling for modals */
+.modal-content {
+  animation: modalFadeIn 0.3s ease;
+}
+
+@keyframes modalFadeIn {
+  from {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+</style>
 </head>
 
 <body class="text-white font-sans">
@@ -255,6 +527,76 @@
   </button>
   <div class="modal-content">
     <img id="modalImage" src="" alt="" class="modal-img">
+  </div>
+</div>
+
+<!-- Modal for PDF Preview -->
+<div class="modal" id="pdfModal">
+  <button class="modal-close" onclick="closePdfModal()">
+    <i data-lucide="x" class="w-6 h-6"></i>
+  </button>
+  <div class="modal-content w-full max-w-6xl h-[90vh]">
+    <div class="flex flex-col h-full">
+      <!-- PDF Header -->
+      <div class="glass border-b border-cyan-400/30 p-4 flex justify-between items-center">
+        <div>
+          <h3 class="text-xl font-bold text-cyan-400">
+            <span class="lang en">Certificates Portfolio</span>
+            <span class="lang id hidden">Portofolio Sertifikat</span>
+          </h3>
+          <p class="text-sm text-gray-400">
+            <span class="lang en">All certifications in one document</span>
+            <span class="lang id hidden">Semua sertifikasi dalam satu dokumen</span>
+          </p>
+        </div>
+        <div class="flex gap-3">
+          <a href="Sertifikat.pdf" 
+             download
+             class="px-4 py-2 bg-gradient-to-r from-cyan-500 to-blue-600 rounded-lg font-medium hover:opacity-90 transition flex items-center gap-2">
+            <i data-lucide="download" class="w-4 h-4"></i>
+            <span class="lang en">Download</span>
+            <span class="lang id hidden">Unduh</span>
+          </a>
+          <button onclick="closePdfModal()" 
+                  class="px-4 py-2 glass rounded-lg font-medium hover:bg-cyan-500/20 transition">
+            <span class="lang en">Close</span>
+            <span class="lang id hidden">Tutup</span>
+          </button>
+        </div>
+      </div>
+      
+      <!-- PDF Viewer -->
+      <div class="flex-grow p-4 bg-gray-900/50 overflow-hidden">
+        <iframe id="pdfViewer" 
+                src="" 
+                class="w-full h-full rounded-lg border border-cyan-400/20"
+                frameborder="0"
+                allowfullscreen>
+        </iframe>
+      </div>
+      
+      <!-- PDF Controls -->
+      <div class="glass border-t border-cyan-400/30 p-4">
+        <div class="flex items-center justify-center gap-6">
+          <button onclick="zoomOutPdf()" 
+                  class="p-2 glass rounded-lg hover:bg-cyan-500/20 transition">
+            <i data-lucide="zoom-out" class="w-5 h-5"></i>
+          </button>
+          <span class="text-gray-300 text-sm" id="zoomLevel">100%</span>
+          <button onclick="zoomInPdf()" 
+                  class="p-2 glass rounded-lg hover:bg-cyan-500/20 transition">
+            <i data-lucide="zoom-in" class="w-5 h-5"></i>
+          </button>
+          <div class="h-6 w-px bg-gray-600"></div>
+          <button onclick="openPdfFullscreen()" 
+                  class="p-2 glass rounded-lg hover:bg-cyan-500/20 transition flex items-center gap-2">
+            <i data-lucide="maximize-2" class="w-4 h-4"></i>
+            <span class="text-sm lang en">Fullscreen</span>
+            <span class="text-sm lang id hidden">Layar Penuh</span>
+          </button>
+        </div>
+      </div>
+    </div>
   </div>
 </div>
 
@@ -466,17 +808,229 @@
   </div>
 </section>
 
-<!-- WORKFLOW -->
-<section class="py-20 px-6 text-center">
-  <h3 class="text-3xl font-bold text-cyan-400 mb-12 fade-up">
+<!-- WORKFLOW - Versi Diperbarui -->
+<section class="py-20 px-6 text-center overflow-hidden">
+  <h3 class="text-3xl font-bold text-cyan-400 mb-4 fade-up">
     <span class="lang en">My Data Analysis Workflow</span>
     <span class="lang id hidden">Alur Kerja Analisis Data</span>
   </h3>
-  <div class="grid md:grid-cols-4 gap-6">
-    <div class="glass p-6 rounded-xl fade-up">📥 Collect</div>
-    <div class="glass p-6 rounded-xl fade-up">🧹 Clean</div>
-    <div class="glass p-6 rounded-xl fade-up">📊 Visualize</div>
-    <div class="glass p-6 rounded-xl fade-up">💡 Insight</div>
+  
+  <p class="text-gray-300 max-w-3xl mx-auto mb-12 text-lg fade-up">
+    <span class="lang en">I follow a structured, iterative process to transform raw data into actionable insights. Each stage is crucial for ensuring data quality and delivering meaningful results.</span>
+    <span class="lang id hidden">Saya mengikuti proses terstruktur dan iteratif untuk mengubah data mentah menjadi insight yang dapat ditindaklanjuti. Setiap tahap sangat penting untuk memastikan kualitas data dan memberikan hasil yang bermakna.</span>
+  </p>
+
+  <div class="max-w-6xl mx-auto">
+    <!-- Desktop View (Horizontal Flow dengan Panah) -->
+    <div class="hidden md:flex items-center justify-between mb-12 relative fade-up">
+      <!-- Garis koneksi -->
+      <div class="absolute top-1/2 left-0 right-0 h-1 bg-gradient-to-r from-cyan-500/30 via-purple-500/30 to-blue-500/30 -translate-y-1/2 z-0"></div>
+      
+      <!-- Step 1: Collect -->
+      <div class="workflow-step z-10 relative group" data-step="1">
+        <div class="w-20 h-20 mx-auto mb-4 rounded-full bg-gradient-to-br from-cyan-500 to-blue-600 flex items-center justify-center text-2xl shadow-lg shadow-cyan-500/30 transition-transform duration-300 group-hover:scale-110">
+          📥
+        </div>
+        <h4 class="font-bold text-xl mb-3">Collect</h4>
+        <div class="glass p-4 rounded-xl w-64 mx-auto opacity-0 group-hover:opacity-100 transition-all duration-300 absolute top-full left-1/2 transform -translate-x-1/2 mt-4 z-20 pointer-events-none group-hover:pointer-events-auto">
+          <p class="text-sm text-gray-200 lang en text-left">
+            Gathering data from various sources: databases, APIs, spreadsheets, and external datasets
+          </p>
+          <p class="text-sm text-gray-200 lang id hidden text-left">
+            Mengumpulkan data dari berbagai sumber: database, API, spreadsheet, dan dataset eksternal
+          </p>
+        </div>
+      </div>
+
+      <!-- Arrow -->
+      <div class="text-3xl text-cyan-400/50 z-10">→</div>
+
+      <!-- Step 2: Clean & Process -->
+      <div class="workflow-step z-10 relative group" data-step="2">
+        <div class="w-20 h-20 mx-auto mb-4 rounded-full bg-gradient-to-br from-purple-500 to-pink-600 flex items-center justify-center text-2xl shadow-lg shadow-purple-500/30 transition-transform duration-300 group-hover:scale-110">
+          🧹
+        </div>
+        <h4 class="font-bold text-xl mb-3">Clean & Process</h4>
+        <div class="glass p-4 rounded-xl w-64 mx-auto opacity-0 group-hover:opacity-100 transition-all duration-300 absolute top-full left-1/2 transform -translate-x-1/2 mt-4 z-20 pointer-events-none group-hover:pointer-events-auto">
+          <p class="text-sm text-gray-200 lang en text-left">
+            Handling missing values, outliers, data validation, and transformation for consistency
+          </p>
+          <p class="text-sm text-gray-200 lang id hidden text-left">
+            Menangani nilai hilang, outlier, validasi data, dan transformasi untuk konsistensi
+          </p>
+        </div>
+      </div>
+
+      <!-- Arrow -->
+      <div class="text-3xl text-cyan-400/50 z-10">→</div>
+
+      <!-- Step 3: Analyze -->
+      <div class="workflow-step z-10 relative group" data-step="3">
+        <div class="w-20 h-20 mx-auto mb-4 rounded-full bg-gradient-to-br from-blue-500 to-indigo-600 flex items-center justify-center text-2xl shadow-lg shadow-blue-500/30 transition-transform duration-300 group-hover:scale-110">
+          📈
+        </div>
+        <h4 class="font-bold text-xl mb-3">Analyze</h4>
+        <div class="glass p-4 rounded-xl w-64 mx-auto opacity-0 group-hover:opacity-100 transition-all duration-300 absolute top-full left-1/2 transform -translate-x-1/2 mt-4 z-20 pointer-events-none group-hover:pointer-events-auto">
+          <p class="text-sm text-gray-200 lang en text-left">
+            Applying statistical methods, exploratory data analysis (EDA), and pattern discovery
+          </p>
+          <p class="text-sm text-gray-200 lang id hidden text-left">
+            Menerapkan metode statistik, eksplorasi data (EDA), dan penemuan pola
+          </p>
+        </div>
+      </div>
+
+      <!-- Arrow -->
+      <div class="text-3xl text-cyan-400/50 z-10">→</div>
+
+      <!-- Step 4: Visualize -->
+      <div class="workflow-step z-10 relative group" data-step="4">
+        <div class="w-20 h-20 mx-auto mb-4 rounded-full bg-gradient-to-br from-green-500 to-emerald-600 flex items-center justify-center text-2xl shadow-lg shadow-green-500/30 transition-transform duration-300 group-hover:scale-110">
+          📊
+        </div>
+        <h4 class="font-bold text-xl mb-3">Visualize</h4>
+        <div class="glass p-4 rounded-xl w-64 mx-auto opacity-0 group-hover:opacity-100 transition-all duration-300 absolute top-full left-1/2 transform -translate-x-1/2 mt-4 z-20 pointer-events-none group-hover:pointer-events-auto">
+          <p class="text-sm text-gray-200 lang en text-left">
+            Creating interactive dashboards, charts, and reports for clear communication
+          </p>
+          <p class="text-sm text-gray-200 lang id hidden text-left">
+            Membuat dashboard interaktif, chart, dan laporan untuk komunikasi yang jelas
+          </p>
+        </div>
+      </div>
+
+      <!-- Arrow -->
+      <div class="text-3xl text-cyan-400/50 z-10">→</div>
+
+      <!-- Step 5: Insight & Recommend -->
+      <div class="workflow-step z-10 relative group" data-step="5">
+        <div class="w-20 h-20 mx-auto mb-4 rounded-full bg-gradient-to-br from-yellow-500 to-amber-600 flex items-center justify-center text-2xl shadow-lg shadow-yellow-500/30 transition-transform duration-300 group-hover:scale-110">
+          💡
+        </div>
+        <h4 class="font-bold text-xl mb-3">Insight & Recommend</h4>
+        <div class="glass p-4 rounded-xl w-64 mx-auto opacity-0 group-hover:opacity-100 transition-all duration-300 absolute top-full left-1/2 transform -translate-x-1/2 mt-4 z-20 pointer-events-none group-hover:pointer-events-auto">
+          <p class="text-sm text-gray-200 lang en text-left">
+            Deriving actionable insights and strategic recommendations for decision-makers
+          </p>
+          <p class="text-sm text-gray-200 lang id hidden text-left">
+            Menarik insight yang dapat ditindaklanjuti dan rekomendasi strategis untuk pengambil keputusan
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Mobile View (Vertical Flow) -->
+    <div class="md:hidden space-y-6 fade-up">
+      <!-- Step 1 -->
+      <div class="workflow-card glass p-5 rounded-2xl relative overflow-hidden group active-step" data-step="1">
+        <div class="absolute top-4 right-4 w-12 h-12 rounded-full bg-gradient-to-br from-cyan-500 to-blue-600 flex items-center justify-center text-xl">
+          📥
+        </div>
+        <div class="pr-16">
+          <h4 class="font-bold text-xl mb-3 text-cyan-400">1. Collect</h4>
+          <p class="text-gray-300 text-sm mb-3 lang en">
+            Gathering data from various sources: databases, APIs, spreadsheets, and external datasets. Ensuring data completeness and accessibility.
+          </p>
+          <p class="text-gray-300 text-sm mb-3 lang id hidden">
+            Mengumpulkan data dari berbagai sumber: database, API, spreadsheet, dan dataset eksternal. Memastikan kelengkapan dan aksesibilitas data.
+          </p>
+          <div class="flex flex-wrap gap-2">
+            <span class="px-3 py-1 bg-cyan-500/20 rounded-full text-xs">SQL Queries</span>
+            <span class="px-3 py-1 bg-cyan-500/20 rounded-full text-xs">API Integration</span>
+            <span class="px-3 py-1 bg-cyan-500/20 rounded-full text-xs">Data Extraction</span>
+          </div>
+        </div>
+        <div class="h-1 w-full bg-gradient-to-r from-cyan-500/50 to-transparent mt-4"></div>
+      </div>
+
+      <!-- Step 2 -->
+      <div class="workflow-card glass p-5 rounded-2xl relative overflow-hidden group" data-step="2">
+        <div class="absolute top-4 right-4 w-12 h-12 rounded-full bg-gradient-to-br from-purple-500 to-pink-600 flex items-center justify-center text-xl">
+          🧹
+        </div>
+        <div class="pr-16">
+          <h4 class="font-bold text-xl mb-3 text-purple-400">2. Clean & Process</h4>
+          <p class="text-gray-300 text-sm mb-3 lang en">
+            Handling missing values, outliers, data validation, and transformation for consistency. Ensuring data quality and reliability.
+          </p>
+          <p class="text-gray-300 text-sm mb-3 lang id hidden">
+            Menangani nilai hilang, outlier, validasi data, dan transformasi untuk konsistensi. Memastikan kualitas dan keandalan data.
+          </p>
+          <div class="flex flex-wrap gap-2">
+            <span class="px-3 py-1 bg-purple-500/20 rounded-full text-xs">Data Cleaning</span>
+            <span class="px-3 py-1 bg-purple-500/20 rounded-full text-xs">ETL Process</span>
+            <span class="px-3 py-1 bg-purple-500/20 rounded-full text-xs">Quality Check</span>
+          </div>
+        </div>
+        <div class="h-1 w-full bg-gradient-to-r from-purple-500/50 to-transparent mt-4"></div>
+      </div>
+
+      <!-- Step 3 -->
+      <div class="workflow-card glass p-5 rounded-2xl relative overflow-hidden group" data-step="3">
+        <div class="absolute top-4 right-4 w-12 h-12 rounded-full bg-gradient-to-br from-blue-500 to-indigo-600 flex items-center justify-center text-xl">
+          📈
+        </div>
+        <div class="pr-16">
+          <h4 class="font-bold text-xl mb-3 text-blue-400">3. Analyze</h4>
+          <p class="text-gray-300 text-sm mb-3 lang en">
+            Applying statistical methods, exploratory data analysis (EDA), and pattern discovery. Uncovering trends, correlations, and anomalies.
+          </p>
+          <p class="text-gray-300 text-sm mb-3 lang id hidden">
+            Menerapkan metode statistik, eksplorasi data (EDA), dan penemuan pola. Mengungkap tren, korelasi, dan anomali.
+          </p>
+          <div class="flex flex-wrap gap-2">
+            <span class="px-3 py-1 bg-blue-500/20 rounded-full text-xs">Statistical Analysis</span>
+            <span class="px-3 py-1 bg-blue-500/20 rounded-full text-xs">EDA</span>
+            <span class="px-3 py-1 bg-blue-500/20 rounded-full text-xs">Pattern Recognition</span>
+          </div>
+        </div>
+        <div class="h-1 w-full bg-gradient-to-r from-blue-500/50 to-transparent mt-4"></div>
+      </div>
+
+      <!-- Step 4 -->
+      <div class="workflow-card glass p-5 rounded-2xl relative overflow-hidden group" data-step="4">
+        <div class="absolute top-4 right-4 w-12 h-12 rounded-full bg-gradient-to-br from-green-500 to-emerald-600 flex items-center justify-center text-xl">
+          📊
+        </div>
+        <div class="pr-16">
+          <h4 class="font-bold text-xl mb-3 text-green-400">4. Visualize</h4>
+          <p class="text-gray-300 text-sm mb-3 lang en">
+            Creating interactive dashboards, charts, and reports for clear communication. Making complex data understandable at a glance.
+          </p>
+          <p class="text-gray-300 text-sm mb-3 lang id hidden">
+            Membuat dashboard interaktif, chart, dan laporan untuk komunikasi yang jelas. Membuat data kompleks mudah dipahami sekilas.
+          </p>
+          <div class="flex flex-wrap gap-2">
+            <span class="px-3 py-1 bg-green-500/20 rounded-full text-xs">Dashboard Design</span>
+            <span class="px-3 py-1 bg-green-500/20 rounded-full text-xs">Data Storytelling</span>
+            <span class="px-3 py-1 bg-green-500/20 rounded-full text-xs">Interactive Reports</span>
+          </div>
+        </div>
+        <div class="h-1 w-full bg-gradient-to-r from-green-500/50 to-transparent mt-4"></div>
+      </div>
+
+      <!-- Step 5 -->
+      <div class="workflow-card glass p-5 rounded-2xl relative overflow-hidden group" data-step="5">
+        <div class="absolute top-4 right-4 w-12 h-12 rounded-full bg-gradient-to-br from-yellow-500 to-amber-600 flex items-center justify-center text-xl">
+          💡
+        </div>
+        <div class="pr-16">
+          <h4 class="font-bold text-xl mb-3 text-yellow-400">5. Insight & Recommend</h4>
+          <p class="text-gray-300 text-sm mb-3 lang en">
+            Deriving actionable insights and strategic recommendations for decision-makers. Translating data findings into business value.
+          </p>
+          <p class="text-gray-300 text-sm mb-3 lang id hidden">
+            Menarik insight yang dapat ditindaklanjuti dan rekomendasi strategis untuk pengambil keputusan. Menerjemahkan temuan data menjadi nilai bisnis.
+          </p>
+          <div class="flex flex-wrap gap-2">
+            <span class="px-3 py-1 bg-yellow-500/20 rounded-full text-xs">Business Insights</span>
+            <span class="px-3 py-1 bg-yellow-500/20 rounded-full text-xs">Strategic Recommendations</span>
+            <span class="px-3 py-1 bg-yellow-500/20 rounded-full text-xs">Decision Support</span>
+          </div>
+        </div>
+        <div class="h-1 w-full bg-gradient-to-r from-yellow-500/50 to-transparent mt-4"></div>
+      </div>
+    </div>
   </div>
 </section>
 
@@ -690,38 +1244,878 @@
   </div>
 </section>
 
-<!-- CHART -->
-<section class="py-20 px-6">
-  <div class="max-w-4xl mx-auto glass p-10 rounded-2xl fade-up">
-    <h3 class="text-3xl font-bold text-center text-cyan-400 mb-6">
-      <span class="lang en">Tools Proficiency</span>
-      <span class="lang id hidden">Tingkat Kemampuan Tools</span>
-    </h3>
-    <canvas id="dataChart"></canvas>
+<!-- PDF CERTIFICATES BUTTON -->
+<section class="py-10 px-6 text-center fade-up">
+  <div class="max-w-4xl mx-auto">
+    <div class="glass p-8 rounded-2xl">
+      <h4 class="text-2xl font-bold text-cyan-400 mb-6">
+        <span class="lang en">Complete Certificate Collection</span>
+        <span class="lang id hidden">Koleksi Sertifikat Lengkap</span>
+      </h4>
+      <p class="text-gray-300 mb-8 max-w-2xl mx-auto">
+        <span class="lang en">View all my certificates in one comprehensive PDF document</span>
+        <span class="lang id hidden">Lihat semua sertifikat saya dalam satu dokumen PDF lengkap</span>
+      </p>
+      
+      <div class="flex flex-col sm:flex-row gap-4 justify-center">
+        <button onclick="viewPdfCertificate()" 
+                class="px-8 py-4 bg-gradient-to-r from-cyan-500 to-blue-600 rounded-full font-semibold hover:opacity-90 transition flex items-center justify-center gap-3 group">
+          <i data-lucide="file-text" class="w-5 h-5 group-hover:scale-110 transition-transform"></i>
+          <span class="lang en">View All Certificates (PDF)</span>
+          <span class="lang id hidden">Lihat Semua Sertifikat (PDF)</span>
+        </button>
+        
+        <a href="Sertifikat.pdf" 
+           download
+           class="px-8 py-4 bg-gradient-to-r from-purple-500 to-pink-600 rounded-full font-semibold hover:opacity-90 transition flex items-center justify-center gap-3 group">
+          <i data-lucide="download" class="w-5 h-5 group-hover:scale-110 transition-transform"></i>
+          <span class="lang en">Download PDF</span>
+          <span class="lang id hidden">Unduh PDF</span>
+        </a>
+      </div>
+    </div>
   </div>
 </section>
 
-<!-- PROJECTS -->
-<section id="projects" class="py-20 px-6">
-  <h3 class="text-3xl font-bold text-center text-cyan-400 mb-12 fade-up">
-    <span class="lang en">Projects</span>
-    <span class="lang id hidden">Proyek</span>
-  </h3>
-  <div class="grid md:grid-cols-3 gap-8">
-    <div class="glass p-6 rounded-xl fade-up hover:scale-[1.02] transition-transform duration-300">
-      <h4 class="text-xl font-bold mb-3">📊 Student Data Analysis</h4>
-      <p class="text-gray-300 text-sm">Analysis of student academic performance using Python & SQL</p>
-    </div>
-    <div class="glass p-6 rounded-xl fade-up hover:scale-[1.02] transition-transform duration-300">
-      <h4 class="text-xl font-bold mb-3">📈 Sales Dashboard</h4>
-      <p class="text-gray-300 text-sm">Interactive sales analytics dashboard with Power BI</p>
-    </div>
-    <div class="glass p-6 rounded-xl fade-up hover:scale-[1.02] transition-transform duration-300">
-      <h4 class="text-xl font-bold mb-3">📉 Academic Performance Prediction</h4>
-      <p class="text-gray-300 text-sm">Machine learning model to predict student grades</p>
+<!-- TOOLS PROFICIENCY - Versi Interaktif -->
+<section class="py-20 px-6">
+  <div class="max-w-6xl mx-auto">
+    <h3 class="text-3xl font-bold text-center text-cyan-400 mb-4 fade-up">
+      <span class="lang en">Tools Proficiency</span>
+      <span class="lang id hidden">Tingkat Kemampuan Tools</span>
+    </h3>
+    
+    <p class="text-gray-300 text-center max-w-3xl mx-auto mb-12 text-lg fade-up">
+      <span class="lang en">My expertise level across essential data analysis tools, ranked from most to least proficient</span>
+      <span class="lang id hidden">Tingkat keahlian saya di berbagai tools analisis data penting, diurutkan dari yang paling dikuasai</span>
+    </p>
+
+    <div class="grid lg:grid-cols-2 gap-12 items-center">
+      <!-- Left Column: Chart Container -->
+      <div class="glass p-6 rounded-2xl fade-up">
+        <div class="flex justify-between items-center mb-6">
+          <h4 class="text-xl font-bold text-cyan-300">
+            <span class="lang en">Proficiency Chart</span>
+            <span class="lang id hidden">Chart Kemampuan</span>
+          </h4>
+          
+          <!-- Chart Type Toggle -->
+          <div class="flex glass rounded-lg p-1">
+            <button onclick="changeChartType('bar')" 
+                    class="chart-type-btn px-4 py-2 rounded-md transition-all duration-300 active-chart" 
+                    data-type="bar">
+              <i data-lucide="bar-chart-3" class="w-4 h-4"></i>
+            </button>
+            <button onclick="changeChartType('radar')" 
+                    class="chart-type-btn px-4 py-2 rounded-md transition-all duration-300" 
+                    data-type="radar">
+              <i data-lucide="radar" class="w-4 h-4"></i>
+            </button>
+            <button onclick="changeChartType('polar')" 
+                    class="chart-type-btn px-4 py-2 rounded-md transition-all duration-300" 
+                    data-type="polar">
+              <i data-lucide="circle" class="w-4 h-4"></i>
+            </button>
+          </div>
+        </div>
+        
+        <div class="relative h-80">
+          <canvas id="proficiencyChart"></canvas>
+          
+          <!-- Loading Animation -->
+          <div id="chartLoading" class="absolute inset-0 flex items-center justify-center">
+            <div class="flex flex-col items-center">
+              <div class="w-12 h-12 border-4 border-cyan-500/30 border-t-cyan-500 rounded-full animate-spin mb-3"></div>
+              <p class="text-gray-400 text-sm">
+                <span class="lang en">Loading chart...</span>
+                <span class="lang id hidden">Memuat chart...</span>
+              </p>
+            </div>
+          </div>
+        </div>
+        
+        <!-- Legend -->
+        <div class="flex flex-wrap gap-3 mt-6 justify-center">
+          <div class="flex items-center gap-2">
+            <div class="w-3 h-3 bg-gradient-to-r from-cyan-500 to-blue-600 rounded-full"></div>
+            <span class="text-sm text-gray-300">Advanced (80-100%)</span>
+          </div>
+          <div class="flex items-center gap-2">
+            <div class="w-3 h-3 bg-gradient-to-r from-green-500 to-emerald-600 rounded-full"></div>
+            <span class="text-sm text-gray-300">Proficient (60-79%)</span>
+          </div>
+          <div class="flex items-center gap-2">
+            <div class="w-3 h-3 bg-gradient-to-r from-yellow-500 to-amber-600 rounded-full"></div>
+            <span class="text-sm text-gray-300">Intermediate (40-59%)</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Right Column: Tools Details -->
+      <div class="fade-up">
+        <div class="mb-8">
+          <h4 class="text-2xl font-bold text-cyan-300 mb-6">
+            <span class="lang en">Tools Expertise Details</span>
+            <span class="lang id hidden">Detail Keahlian Tools</span>
+          </h4>
+          
+          <!-- Tools List with Progress Bars -->
+          <div class="space-y-6">
+            <!-- Power BI -->
+            <div class="tool-item glass p-4 rounded-xl hover:scale-[1.02] transition-transform duration-300" data-tool="powerbi">
+              <div class="flex justify-between items-center mb-2">
+                <div class="flex items-center gap-3">
+                  <div class="w-10 h-10 rounded-lg bg-gradient-to-br from-yellow-500 to-orange-600 flex items-center justify-center">
+                    <img src="https://img.icons8.com/color/24/power-bi.png" alt="Power BI" class="w-6 h-6">
+                  </div>
+                  <div>
+                    <h5 class="font-bold text-lg">Power BI</h5>
+                    <p class="text-sm text-gray-400">Microsoft</p>
+                  </div>
+                </div>
+                <div class="text-right">
+                  <span class="text-2xl font-bold text-cyan-400">95%</span>
+                  <p class="text-xs text-gray-400">Advanced</p>
+                </div>
+              </div>
+              <div class="w-full bg-gray-700/50 rounded-full h-3">
+                <div class="bg-gradient-to-r from-yellow-500 to-orange-600 h-3 rounded-full" style="width: 95%"></div>
+              </div>
+              <p class="text-sm text-gray-300 mt-3 lang en">
+                Creating interactive dashboards, data modeling, DAX formulas, and advanced visualizations
+              </p>
+              <p class="text-sm text-gray-300 mt-3 lang id hidden">
+                Membuat dashboard interaktif, pemodelan data, formula DAX, dan visualisasi tingkat lanjut
+              </p>
+            </div>
+
+            <!-- Python -->
+            <div class="tool-item glass p-4 rounded-xl hover:scale-[1.02] transition-transform duration-300" data-tool="python">
+              <div class="flex justify-between items-center mb-2">
+                <div class="flex items-center gap-3">
+                  <div class="w-10 h-10 rounded-lg bg-gradient-to-br from-blue-500 to-cyan-600 flex items-center justify-center">
+                    <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/python/python-original.svg" alt="Python" class="w-6 h-6">
+                  </div>
+                  <div>
+                    <h5 class="font-bold text-lg">Python</h5>
+                    <p class="text-sm text-gray-400">Data Analysis</p>
+                  </div>
+                </div>
+                <div class="text-right">
+                  <span class="text-2xl font-bold text-cyan-400">92%</span>
+                  <p class="text-xs text-gray-400">Advanced</p>
+                </div>
+              </div>
+              <div class="w-full bg-gray-700/50 rounded-full h-3">
+                <div class="bg-gradient-to-r from-blue-500 to-cyan-600 h-3 rounded-full" style="width: 92%"></div>
+              </div>
+              <p class="text-sm text-gray-300 mt-3 lang en">
+                Pandas, NumPy, data cleaning, statistical analysis, and visualization with Matplotlib/Seaborn
+              </p>
+              <p class="text-sm text-gray-300 mt-3 lang id hidden">
+                Pandas, NumPy, pembersihan data, analisis statistik, dan visualisasi dengan Matplotlib/Seaborn
+              </p>
+            </div>
+
+            <!-- SQL -->
+            <div class="tool-item glass p-4 rounded-xl hover:scale-[1.02] transition-transform duration-300" data-tool="sql">
+              <div class="flex justify-between items-center mb-2">
+                <div class="flex items-center gap-3">
+                  <div class="w-10 h-10 rounded-lg bg-gradient-to-br from-orange-500 to-red-600 flex items-center justify-center">
+                    <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/mysql/mysql-original.svg" alt="SQL" class="w-6 h-6">
+                  </div>
+                  <div>
+                    <h5 class="font-bold text-lg">SQL</h5>
+                    <p class="text-sm text-gray-400">Database</p>
+                  </div>
+                </div>
+                <div class="text-right">
+                  <span class="text-2xl font-bold text-cyan-400">90%</span>
+                  <p class="text-xs text-gray-400">Advanced</p>
+                </div>
+              </div>
+              <div class="w-full bg-gray-700/50 rounded-full h-3">
+                <div class="bg-gradient-to-r from-orange-500 to-red-600 h-3 rounded-full" style="width: 90%"></div>
+              </div>
+              <p class="text-sm text-gray-300 mt-3 lang en">
+                Complex queries, joins, subqueries, window functions, and database optimization
+              </p>
+              <p class="text-sm text-gray-300 mt-3 lang id hidden">
+                Query kompleks, joins, subqueries, window functions, dan optimasi database
+              </p>
+            </div>
+
+            <!-- Excel -->
+            <div class="tool-item glass p-4 rounded-xl hover:scale-[1.02] transition-transform duration-300" data-tool="excel">
+              <div class="flex justify-between items-center mb-2">
+                <div class="flex items-center gap-3">
+                  <div class="w-10 h-10 rounded-lg bg-gradient-to-br from-green-500 to-emerald-600 flex items-center justify-center">
+                    <img src="https://img.icons8.com/color/24/microsoft-excel-2019.png" alt="Excel" class="w-6 h-6">
+                  </div>
+                  <div>
+                    <h5 class="font-bold text-lg">Excel</h5>
+                    <p class="text-sm text-gray-400">Microsoft</p>
+                  </div>
+                </div>
+                <div class="text-right">
+                  <span class="text-2xl font-bold text-cyan-400">88%</span>
+                  <p class="text-xs text-gray-400">Advanced</p>
+                </div>
+              </div>
+              <div class="w-full bg-gray-700/50 rounded-full h-3">
+                <div class="bg-gradient-to-r from-green-500 to-emerald-600 h-3 rounded-full" style="width: 88%"></div>
+              </div>
+              <p class="text-sm text-gray-300 mt-3 lang en">
+                PivotTables, advanced formulas, macros, data analysis, and visualization
+              </p>
+              <p class="text-sm text-gray-300 mt-3 lang id hidden">
+                PivotTables, formula tingkat lanjut, makro, analisis data, dan visualisasi
+              </p>
+            </div>
+
+            <!-- PostgreSQL -->
+            <div class="tool-item glass p-4 rounded-xl hover:scale-[1.02] transition-transform duration-300" data-tool="postgresql">
+              <div class="flex justify-between items-center mb-2">
+                <div class="flex items-center gap-3">
+                  <div class="w-10 h-10 rounded-lg bg-gradient-to-br from-blue-400 to-indigo-600 flex items-center justify-center">
+                    <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/postgresql/postgresql-original.svg" alt="PostgreSQL" class="w-6 h-6">
+                  </div>
+                  <div>
+                    <h5 class="font-bold text-lg">PostgreSQL</h5>
+                    <p class="text-sm text-gray-400">Database</p>
+                  </div>
+                </div>
+                <div class="text-right">
+                  <span class="text-2xl font-bold text-cyan-400">85%</span>
+                  <p class="text-xs text-gray-400">Advanced</p>
+                </div>
+              </div>
+              <div class="w-full bg-gray-700/50 rounded-full h-3">
+                <div class="bg-gradient-to-r from-blue-400 to-indigo-600 h-3 rounded-full" style="width: 85%"></div>
+              </div>
+              <p class="text-sm text-gray-300 mt-3 lang en">
+                Advanced queries, indexing, stored procedures, and database administration
+              </p>
+              <p class="text-sm text-gray-300 mt-3 lang id hidden">
+                Query tingkat lanjut, indexing, stored procedures, dan administrasi database
+              </p>
+            </div>
+
+            <!-- Tableau -->
+            <div class="tool-item glass p-4 rounded-xl hover:scale-[1.02] transition-transform duration-300" data-tool="tableau">
+              <div class="flex justify-between items-center mb-2">
+                <div class="flex items-center gap-3">
+                  <div class="w-10 h-10 rounded-lg bg-gradient-to-br from-purple-500 to-pink-600 flex items-center justify-center">
+                    <img src="https://img.icons8.com/color/24/tableau-software.png" alt="Tableau" class="w-6 h-6">
+                  </div>
+                  <div>
+                    <h5 class="font-bold text-lg">Tableau</h5>
+                    <p class="text-sm text-gray-400">Visualization</p>
+                  </div>
+                </div>
+                <div class="text-right">
+                  <span class="text-2xl font-bold text-cyan-400">82%</span>
+                  <p class="text-xs text-gray-400">Advanced</p>
+                </div>
+              </div>
+              <div class="w-full bg-gray-700/50 rounded-full h-3">
+                <div class="bg-gradient-to-r from-purple-500 to-pink-600 h-3 rounded-full" style="width: 82%"></div>
+              </div>
+              <p class="text-sm text-gray-300 mt-3 lang en">
+                Dashboard creation, data storytelling, interactive reports, and data blending
+              </p>
+              <p class="text-sm text-gray-300 mt-3 lang id hidden">
+                Pembuatan dashboard, data storytelling, laporan interaktif, dan data blending
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Summary -->
+        <div class="glass p-6 rounded-2xl">
+          <div class="flex items-start gap-4">
+            <div class="bg-gradient-to-br from-cyan-500 to-blue-600 p-3 rounded-xl">
+              <i data-lucide="zap" class="w-6 h-6"></i>
+            </div>
+            <div>
+              <h5 class="font-bold text-lg mb-2 text-cyan-300">
+                <span class="lang en">Key Strengths</span>
+                <span class="lang id hidden">Kekuatan Utama</span>
+              </h5>
+              <p class="text-gray-300 text-sm mb-3 lang en">
+                Specialized in data visualization and dashboard development with Power BI. 
+                Strong analytical skills with Python and SQL for data processing and insights generation.
+              </p>
+              <p class="text-gray-300 text-sm mb-3 lang id hidden">
+                Spesialis dalam visualisasi data dan pengembangan dashboard dengan Power BI.
+                Keterampilan analitis yang kuat dengan Python dan SQL untuk pemrosesan data dan pembuatan insight.
+              </p>
+              <div class="flex flex-wrap gap-2">
+                <span class="px-3 py-1 bg-cyan-500/20 rounded-full text-xs">Data Visualization</span>
+                <span class="px-3 py-1 bg-blue-500/20 rounded-full text-xs">Analytics</span>
+                <span class="px-3 py-1 bg-green-500/20 rounded-full text-xs">Dashboard Design</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 </section>
+
+<!-- PROJECTS - Versi Interaktif dengan GitHub -->
+<section id="projects" class="py-20 px-6">
+  <div class="max-w-6xl mx-auto">
+    <h3 class="text-3xl font-bold text-center text-cyan-400 mb-4 fade-up">
+      <span class="lang en">Data Analytics Projects</span>
+      <span class="lang id hidden">Proyek Analisis Data</span>
+    </h3>
+    
+    <p class="text-gray-300 text-center max-w-3xl mx-auto mb-12 text-lg fade-up">
+      <span class="lang en">Explore my data analysis projects with interactive dashboards and GitHub repositories</span>
+      <span class="lang id hidden">Jelajahi proyek analisis data saya dengan dashboard interaktif dan repository GitHub</span>
+    </p>
+
+    <!-- Project 1: FIFA Women's World Cup -->
+    <div class="glass rounded-2xl overflow-hidden mb-12 fade-up hover:scale-[1.02] transition-transform duration-500">
+      <div class="grid lg:grid-cols-2">
+        <!-- Left: Project Preview -->
+        <div class="p-8">
+          <div class="flex items-center gap-3 mb-6">
+            <div class="w-12 h-12 rounded-xl bg-gradient-to-br from-purple-500 to-pink-600 flex items-center justify-center">
+              <i data-lucide="bar-chart-3" class="w-6 h-6"></i>
+            </div>
+            <div>
+              <h4 class="text-2xl font-bold">FIFA Women's World Cup Analysis</h4>
+              <p class="text-cyan-300">Data Visualization Project</p>
+            </div>
+          </div>
+          
+          <p class="text-gray-300 mb-6 lang en">
+            Comprehensive analysis of FIFA Women's World Cup data including match statistics, team performance, 
+            and player analytics. Built with interactive dashboards for insightful data exploration.
+          </p>
+          <p class="text-gray-300 mb-6 lang id hidden">
+            Analisis komprehensif data Piala Dunia Wanita FIFA termasuk statistik pertandingan, performa tim, 
+            dan analisis pemain. Dibangun dengan dashboard interaktif untuk eksplorasi data yang insightful.
+          </p>
+          
+          <div class="flex flex-wrap gap-3 mb-8">
+            <span class="px-4 py-2 bg-cyan-500/20 rounded-full text-sm">Python</span>
+            <span class="px-4 py-2 bg-blue-500/20 rounded-full text-sm">Power BI</span>
+            <span class="px-4 py-2 bg-purple-500/20 rounded-full text-sm">Data Visualization</span>
+            <span class="px-4 py-2 bg-green-500/20 rounded-full text-sm">Dashboard</span>
+            <span class="px-4 py-2 bg-yellow-500/20 rounded-full text-sm">Sports Analytics</span>
+          </div>
+          
+          <div class="flex flex-wrap gap-4">
+            <!-- GitHub Button -->
+            <a href="https://github.com/Agush01-ui/VisualisasiData-FIFAWomensWorldCup.git" 
+               target="_blank"
+               class="px-6 py-3 bg-gradient-to-r from-gray-800 to-gray-900 rounded-lg font-semibold hover:opacity-90 transition flex items-center gap-3 group">
+              <i data-lucide="github" class="w-5 h-5 group-hover:scale-110 transition-transform"></i>
+              <span>View on GitHub</span>
+            </a>
+            
+            <!-- Dashboard Preview Button -->
+            <button onclick="openDashboardModal('project1')" 
+                    class="px-6 py-3 bg-gradient-to-r from-cyan-500 to-blue-600 rounded-lg font-semibold hover:opacity-90 transition flex items-center gap-3 group">
+              <i data-lucide="layout-dashboard" class="w-5 h-5 group-hover:scale-110 transition-transform"></i>
+              <span class="lang en">View Dashboard</span>
+              <span class="lang id hidden">Lihat Dashboard</span>
+            </button>
+            
+            <!-- Report Button -->
+            <button onclick="openReportModal('project1')" 
+                    class="px-6 py-3 glass rounded-lg font-semibold hover:bg-cyan-500/20 transition flex items-center gap-3 group">
+              <i data-lucide="file-text" class="w-5 h-5 group-hover:scale-110 transition-transform"></i>
+              <span class="lang en">Project Report</span>
+              <span class="lang id hidden">Laporan Proyek</span>
+            </button>
+          </div>
+        </div>
+        
+        <!-- Right: Dashboard Preview -->
+        <div class="bg-gradient-to-br from-gray-900 to-gray-800 p-4 relative overflow-hidden group">
+          <div class="absolute inset-0 bg-gradient-to-r from-cyan-500/10 to-purple-500/10 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+          
+          <!-- Mock Dashboard -->
+          <div class="relative z-10">
+            <div class="flex justify-between items-center mb-4">
+              <h5 class="text-lg font-semibold text-cyan-300">
+                <span class="lang en">Dashboard Preview</span>
+                <span class="lang id hidden">Pratinjau Dashboard</span>
+              </h5>
+              <div class="flex gap-2">
+                <div class="w-3 h-3 rounded-full bg-red-500"></div>
+                <div class="w-3 h-3 rounded-full bg-yellow-500"></div>
+                <div class="w-3 h-3 rounded-full bg-green-500"></div>
+              </div>
+            </div>
+            
+            <!-- Dashboard Grid Mockup -->
+            <div class="grid grid-cols-2 gap-3 mb-3">
+              <div class="bg-gray-800/50 p-3 rounded-lg">
+                <div class="flex justify-between items-start mb-2">
+                  <div>
+                    <p class="text-xs text-gray-400">Total Matches</p>
+                    <p class="text-xl font-bold">156</p>
+                  </div>
+                  <div class="w-8 h-8 rounded bg-cyan-500/20 flex items-center justify-center">
+                    <i data-lucide="trophy" class="w-4 h-4 text-cyan-400"></i>
+                  </div>
+                </div>
+                <div class="w-full bg-gray-700 rounded-full h-1">
+                  <div class="bg-cyan-500 h-1 rounded-full" style="width: 85%"></div>
+                </div>
+              </div>
+              
+              <div class="bg-gray-800/50 p-3 rounded-lg">
+                <div class="flex justify-between items-start mb-2">
+                  <div>
+                    <p class="text-xs text-gray-400">Teams Analyzed</p>
+                    <p class="text-xl font-bold">32</p>
+                  </div>
+                  <div class="w-8 h-8 rounded bg-purple-500/20 flex items-center justify-center">
+                    <i data-lucide="users" class="w-4 h-4 text-purple-400"></i>
+                  </div>
+                </div>
+                <div class="w-full bg-gray-700 rounded-full h-1">
+                  <div class="bg-purple-500 h-1 rounded-full" style="width: 75%"></div>
+                </div>
+              </div>
+            </div>
+            
+            <!-- Chart Mockup -->
+            <div class="bg-gray-800/50 p-3 rounded-lg mb-3">
+              <div class="flex justify-between items-center mb-3">
+                <p class="text-sm font-medium text-gray-300">Goals Distribution</p>
+                <span class="text-xs text-cyan-400">2023 Season</span>
+              </div>
+              <div class="flex items-end h-24 gap-1">
+                <div class="flex-1 bg-gradient-to-t from-cyan-500 to-cyan-600 rounded-t" style="height: 70%"></div>
+                <div class="flex-1 bg-gradient-to-t from-blue-500 to-blue-600 rounded-t" style="height: 90%"></div>
+                <div class="flex-1 bg-gradient-to-t from-purple-500 to-purple-600 rounded-t" style="height: 60%"></div>
+                <div class="flex-1 bg-gradient-to-t from-pink-500 to-pink-600 rounded-t" style="height: 80%"></div>
+                <div class="flex-1 bg-gradient-to-t from-cyan-500 to-cyan-600 rounded-t" style="height: 50%"></div>
+              </div>
+              <div class="flex justify-between text-xs text-gray-400 mt-2">
+                <span>USA</span>
+                <span>GER</span>
+                <span>SWE</span>
+                <span>ENG</span>
+                <span>FRA</span>
+              </div>
+            </div>
+            
+            <!-- Data Table Mockup -->
+            <div class="bg-gray-800/50 p-3 rounded-lg">
+              <div class="flex justify-between items-center mb-3">
+                <p class="text-sm font-medium text-gray-300">Top Performing Teams</p>
+                <i data-lucide="filter" class="w-4 h-4 text-gray-400"></i>
+              </div>
+              <div class="space-y-2">
+                <div class="flex items-center justify-between">
+                  <div class="flex items-center gap-2">
+                    <div class="w-6 h-6 rounded bg-cyan-500/20 flex items-center justify-center">
+                      <span class="text-xs font-bold">1</span>
+                    </div>
+                    <span class="text-sm">United States</span>
+                  </div>
+                  <span class="text-sm font-bold text-cyan-400">4 Wins</span>
+                </div>
+                <div class="flex items-center justify-between">
+                  <div class="flex items-center gap-2">
+                    <div class="w-6 h-6 rounded bg-blue-500/20 flex items-center justify-center">
+                      <span class="text-xs font-bold">2</span>
+                    </div>
+                    <span class="text-sm">Germany</span>
+                  </div>
+                  <span class="text-sm font-bold text-blue-400">3 Wins</span>
+                </div>
+                <div class="flex items-center justify-between">
+                  <div class="flex items-center gap-2">
+                    <div class="w-6 h-6 rounded bg-purple-500/20 flex items-center justify-center">
+                      <span class="text-xs font-bold">3</span>
+                    </div>
+                    <span class="text-sm">Sweden</span>
+                  </div>
+                  <span class="text-sm font-bold text-purple-400">2 Wins</span>
+                </div>
+              </div>
+            </div>
+            
+            <!-- View More Button -->
+            <button onclick="openDashboardModal('project1')" 
+                    class="w-full mt-4 py-2 glass rounded-lg text-cyan-400 hover:bg-cyan-500/20 transition flex items-center justify-center gap-2 group">
+              <span class="lang en">Click to view full dashboard</span>
+              <span class="lang id hidden">Klik untuk lihat dashboard lengkap</span>
+              <i data-lucide="arrow-right" class="w-4 h-4 group-hover:translate-x-1 transition-transform"></i>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Coming Soon Projects -->
+    <div class="fade-up">
+      <h4 class="text-2xl font-bold text-center text-cyan-300 mb-8">
+        <span class="lang en">More Projects Coming Soon</span>
+        <span class="lang id hidden">Proyek Lain Segera Hadir</span>
+      </h4>
+      
+      <div class="grid md:grid-cols-3 gap-6">
+        <!-- Project 2 -->
+        <div class="glass p-6 rounded-2xl text-center group hover:scale-[1.02] transition-transform duration-300">
+          <div class="w-16 h-16 mx-auto mb-4 rounded-full bg-gradient-to-br from-blue-500 to-cyan-600 flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
+            <i data-lucide="shopping-cart" class="w-8 h-8"></i>
+          </div>
+          <h4 class="text-xl font-bold mb-3">E-commerce Sales Analytics</h4>
+          <p class="text-gray-300 text-sm mb-4 lang en">
+            Sales performance analysis and customer behavior insights
+          </p>
+          <p class="text-gray-300 text-sm mb-4 lang id hidden">
+            Analisis performa penjualan dan insight perilaku pelanggan
+          </p>
+          <div class="flex flex-wrap gap-2 justify-center mb-4">
+            <span class="px-3 py-1 bg-blue-500/20 rounded-full text-xs">Power BI</span>
+            <span class="px-3 py-1 bg-green-500/20 rounded-full text-xs">SQL</span>
+          </div>
+          <span class="px-4 py-2 bg-gray-800/50 rounded-lg text-sm text-gray-400">
+            In Progress
+          </span>
+        </div>
+        
+        <!-- Project 3 -->
+        <div class="glass p-6 rounded-2xl text-center group hover:scale-[1.02] transition-transform duration-300">
+          <div class="w-16 h-16 mx-auto mb-4 rounded-full bg-gradient-to-br from-green-500 to-emerald-600 flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
+            <i data-lucide="trending-up" class="w-8 h-8"></i>
+          </div>
+          <h4 class="text-xl font-bold mb-3">Financial Data Analysis</h4>
+          <p class="text-gray-300 text-sm mb-4 lang en">
+            Stock market trends and financial forecasting models
+          </p>
+          <p class="text-gray-300 text-sm mb-4 lang id hidden">
+            Tren pasar saham dan model peramalan keuangan
+          </p>
+          <div class="flex flex-wrap gap-2 justify-center mb-4">
+            <span class="px-3 py-1 bg-green-500/20 rounded-full text-xs">Python</span>
+            <span class="px-3 py-1 bg-purple-500/20 rounded-full text-xs">Tableau</span>
+          </div>
+          <span class="px-4 py-2 bg-gray-800/50 rounded-lg text-sm text-gray-400">
+            Coming Soon
+          </span>
+        </div>
+        
+        <!-- Project 4 -->
+        <div class="glass p-6 rounded-2xl text-center group hover:scale-[1.02] transition-transform duration-300">
+          <div class="w-16 h-16 mx-auto mb-4 rounded-full bg-gradient-to-br from-purple-500 to-pink-600 flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
+            <i data-lucide="users" class="w-8 h-8"></i>
+          </div>
+          <h4 class="text-xl font-bold mb-3">Social Media Analytics</h4>
+          <p class="text-gray-300 text-sm mb-4 lang en">
+            Engagement analysis and content performance metrics
+          </p>
+          <p class="text-gray-300 text-sm mb-4 lang id hidden">
+            Analisis engagement dan metrik performa konten
+          </p>
+          <div class="flex flex-wrap gap-2 justify-center mb-4">
+            <span class="px-3 py-1 bg-purple-500/20 rounded-full text-xs">Python</span>
+            <span class="px-3 py-1 bg-yellow-500/20 rounded-full text-xs">Excel</span>
+          </div>
+          <span class="px-4 py-2 bg-gray-800/50 rounded-lg text-sm text-gray-400">
+            Planned
+          </span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Dashboard Modal -->
+<div class="modal" id="dashboardModal">
+  <button class="modal-close" onclick="closeDashboardModal()">
+    <i data-lucide="x" class="w-6 h-6"></i>
+  </button>
+  <div class="modal-content w-full max-w-6xl h-[90vh]">
+    <div class="flex flex-col h-full">
+      <!-- Dashboard Header -->
+      <div class="glass border-b border-cyan-400/30 p-4 flex justify-between items-center">
+        <div>
+          <h3 class="text-xl font-bold text-cyan-400" id="dashboardTitle">
+            FIFA Women's World Cup Dashboard
+          </h3>
+          <p class="text-sm text-gray-400">
+            <span class="lang en">Interactive data visualization and analysis</span>
+            <span class="lang id hidden">Visualisasi dan analisis data interaktif</span>
+          </p>
+        </div>
+        <div class="flex gap-3">
+          <a href="https://github.com/Agush01-ui/VisualisasiData-FIFAWomensWorldCup.git" 
+             target="_blank"
+             class="px-4 py-2 bg-gradient-to-r from-gray-800 to-gray-900 rounded-lg font-medium hover:opacity-90 transition flex items-center gap-2">
+            <i data-lucide="github" class="w-4 h-4"></i>
+            <span>GitHub</span>
+          </a>
+          <button onclick="closeDashboardModal()" 
+                  class="px-4 py-2 glass rounded-lg font-medium hover:bg-cyan-500/20 transition">
+            <span class="lang en">Close</span>
+            <span class="lang id hidden">Tutup</span>
+          </button>
+        </div>
+      </div>
+      
+      <!-- Dashboard Content -->
+      <div class="flex-grow p-4 bg-gray-900/50 overflow-auto">
+        <div class="max-w-5xl mx-auto">
+          <!-- Dashboard Preview Image -->
+          <div class="glass p-4 rounded-xl mb-6">
+            <div class="aspect-video bg-gradient-to-br from-gray-800 to-gray-900 rounded-lg overflow-hidden flex items-center justify-center">
+              <div class="text-center p-8">
+                <div class="w-20 h-20 mx-auto mb-4 rounded-full bg-gradient-to-br from-cyan-500 to-blue-600 flex items-center justify-center">
+                  <i data-lucide="bar-chart-3" class="w-10 h-10"></i>
+                </div>
+                <h4 class="text-2xl font-bold mb-3 text-cyan-400">
+                  <span class="lang en">Interactive Dashboard Preview</span>
+                  <span class="lang id hidden">Pratinjau Dashboard Interaktif</span>
+                </h4>
+                <p class="text-gray-300 mb-6 max-w-md mx-auto lang en">
+                  This dashboard provides comprehensive analysis of FIFA Women's World Cup data including match statistics, team performance metrics, and player analytics.
+                </p>
+                <p class="text-gray-300 mb-6 max-w-md mx-auto lang id hidden">
+                  Dashboard ini menyediakan analisis komprehensif data Piala Dunia Wanita FIFA termasuk statistik pertandingan, metrik performa tim, dan analisis pemain.
+                </p>
+                <a href="https://github.com/Agush01-ui/VisualisasiData-FIFAWomensWorldCup.git" 
+                   target="_blank"
+                   class="inline-flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-cyan-500 to-blue-600 rounded-lg font-semibold hover:opacity-90 transition">
+                  <i data-lucide="external-link" class="w-4 h-4"></i>
+                  <span class="lang en">Explore Project on GitHub</span>
+                  <span class="lang id hidden">Jelajahi Proyek di GitHub</span>
+                </a>
+              </div>
+            </div>
+          </div>
+          
+          <!-- Dashboard Features -->
+          <div class="grid md:grid-cols-3 gap-6 mb-6">
+            <div class="glass p-4 rounded-xl">
+              <div class="w-12 h-12 rounded-lg bg-cyan-500/20 flex items-center justify-center mb-4">
+                <i data-lucide="filter" class="w-6 h-6 text-cyan-400"></i>
+              </div>
+              <h5 class="font-bold text-lg mb-2 text-cyan-300">
+                <span class="lang en">Interactive Filters</span>
+                <span class="lang id hidden">Filter Interaktif</span>
+              </h5>
+              <p class="text-gray-300 text-sm">
+                <span class="lang en">Filter data by year, team, player, and match type for customized analysis</span>
+                <span class="lang id hidden">Filter data berdasarkan tahun, tim, pemain, dan jenis pertandingan untuk analisis yang disesuaikan</span>
+              </p>
+            </div>
+            
+            <div class="glass p-4 rounded-xl">
+              <div class="w-12 h-12 rounded-lg bg-blue-500/20 flex items-center justify-center mb-4">
+                <i data-lucide="trending-up" class="w-6 h-6 text-blue-400"></i>
+              </div>
+              <h5 class="font-bold text-lg mb-2 text-blue-300">
+                <span class="lang en">Performance Metrics</span>
+                <span class="lang id hidden">Metrik Performa</span>
+              </h5>
+              <p class="text-gray-300 text-sm">
+                <span class="lang en">Track team performance, player statistics, and match outcomes with detailed metrics</span>
+                <span class="lang id hidden">Lacak performa tim, statistik pemain, dan hasil pertandingan dengan metrik detail</span>
+              </p>
+            </div>
+            
+            <div class="glass p-4 rounded-xl">
+              <div class="w-12 h-12 rounded-lg bg-purple-500/20 flex items-center justify-center mb-4">
+                <i data-lucide="eye" class="w-6 h-6 text-purple-400"></i>
+              </div>
+              <h5 class="font-bold text-lg mb-2 text-purple-300">
+                <span class="lang en">Visual Analytics</span>
+                <span class="lang id hidden">Analisis Visual</span>
+              </h5>
+              <p class="text-gray-300 text-sm">
+                <span class="lang en">Visualize data with charts, graphs, and heatmaps for better insights</span>
+                <span class="lang id hidden">Visualisasikan data dengan chart, grafik, dan heatmap untuk insight yang lebih baik</span>
+              </p>
+            </div>
+          </div>
+          
+          <!-- Technologies Used -->
+          <div class="glass p-6 rounded-xl">
+            <h5 class="font-bold text-xl mb-4 text-cyan-300">
+              <span class="lang en">Technologies Used</span>
+              <span class="lang id hidden">Teknologi yang Digunakan</span>
+            </h5>
+            <div class="flex flex-wrap gap-4">
+              <div class="flex items-center gap-3">
+                <div class="w-10 h-10 rounded-lg bg-gradient-to-br from-yellow-500 to-orange-600 flex items-center justify-center">
+                  <i data-lucide="bar-chart-3" class="w-5 h-5"></i>
+                </div>
+                <div>
+                  <p class="font-medium">Power BI</p>
+                  <p class="text-xs text-gray-400">Dashboard Development</p>
+                </div>
+              </div>
+              
+              <div class="flex items-center gap-3">
+                <div class="w-10 h-10 rounded-lg bg-gradient-to-br from-blue-500 to-cyan-600 flex items-center justify-center">
+                  <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/python/python-original.svg" alt="Python" class="w-5 h-5">
+                </div>
+                <div>
+                  <p class="font-medium">Python</p>
+                  <p class="text-xs text-gray-400">Data Processing</p>
+                </div>
+              </div>
+              
+              <div class="flex items-center gap-3">
+                <div class="w-10 h-10 rounded-lg bg-gradient-to-br from-orange-500 to-red-600 flex items-center justify-center">
+                  <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/mysql/mysql-original.svg" alt="SQL" class="w-5 h-5">
+                </div>
+                <div>
+                  <p class="font-medium">SQL</p>
+                  <p class="text-xs text-gray-400">Database Management</p>
+                </div>
+              </div>
+              
+              <div class="flex items-center gap-3">
+                <div class="w-10 h-10 rounded-lg bg-gradient-to-br from-green-500 to-emerald-600 flex items-center justify-center">
+                  <img src="https://img.icons8.com/color/24/microsoft-excel-2019.png" alt="Excel" class="w-5 h-5">
+                </div>
+                <div>
+                  <p class="font-medium">Excel</p>
+                  <p class="text-xs text-gray-400">Data Cleaning</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Report Modal -->
+<div class="modal" id="reportModal">
+  <button class="modal-close" onclick="closeReportModal()">
+    <i data-lucide="x" class="w-6 h-6"></i>
+  </button>
+  <div class="modal-content w-full max-w-4xl h-[90vh]">
+    <div class="flex flex-col h-full">
+      <div class="glass border-b border-cyan-400/30 p-4 flex justify-between items-center">
+        <div>
+          <h3 class="text-xl font-bold text-cyan-400">Project Report</h3>
+          <p class="text-sm text-gray-400">FIFA Women's World Cup Analysis</p>
+        </div>
+        <button onclick="closeReportModal()" 
+                class="px-4 py-2 glass rounded-lg font-medium hover:bg-cyan-500/20 transition">
+          <span class="lang en">Close</span>
+          <span class="lang id hidden">Tutup</span>
+        </button>
+      </div>
+      
+      <div class="flex-grow p-6 bg-gray-900/50 overflow-auto">
+        <div class="max-w-3xl mx-auto">
+          <!-- Report Content -->
+          <div class="glass p-6 rounded-xl mb-6">
+            <h4 class="text-2xl font-bold mb-4 text-cyan-400">Project Overview</h4>
+            <p class="text-gray-300 mb-4 lang en">
+              This project analyzes FIFA Women's World Cup data to provide insights into team performance, 
+              player statistics, and match outcomes. The goal is to help sports analysts and enthusiasts 
+              understand patterns and trends in women's football.
+            </p>
+            <p class="text-gray-300 mb-4 lang id hidden">
+              Proyek ini menganalisis data Piala Dunia Wanita FIFA untuk memberikan insight tentang performa tim, 
+              statistik pemain, dan hasil pertandingan. Tujuannya adalah membantu analis olahraga dan penggemar 
+              memahami pola dan tren dalam sepak bola wanita.
+            </p>
+            
+            <h5 class="text-lg font-bold mb-3 text-cyan-300 mt-6">
+              <span class="lang en">Key Objectives</span>
+              <span class="lang id hidden">Tujuan Utama</span>
+            </h5>
+            <ul class="space-y-2 mb-6">
+              <li class="flex items-start gap-2">
+                <i data-lucide="check-circle" class="w-5 h-5 text-green-500 mt-0.5 flex-shrink-0"></i>
+                <span class="text-gray-300 lang en">Analyze team performance across different tournaments</span>
+                <span class="text-gray-300 lang id hidden">Analisis performa tim di berbagai turnamen</span>
+              </li>
+              <li class="flex items-start gap-2">
+                <i data-lucide="check-circle" class="w-5 h-5 text-green-500 mt-0.5 flex-shrink-0"></i>
+                <span class="text-gray-300 lang en">Identify top performing players and teams</span>
+                <span class="text-gray-300 lang id hidden">Identifikasi pemain dan tim berperforma terbaik</span>
+              </li>
+              <li class="flex items-start gap-2">
+                <i data-lucide="check-circle" class="w-5 h-5 text-green-500 mt-0.5 flex-shrink-0"></i>
+                <span class="text-gray-300 lang en">Create interactive dashboards for data exploration</span>
+                <span class="text-gray-300 lang id hidden">Buat dashboard interaktif untuk eksplorasi data</span>
+              </li>
+              <li class="flex items-start gap-2">
+                <i data-lucide="check-circle" class="w-5 h-5 text-green-500 mt-0.5 flex-shrink-0"></i>
+                <span class="text-gray-300 lang en">Provide actionable insights for sports analysts</span>
+                <span class="text-gray-300 lang id hidden">Berikan insight yang dapat ditindaklanjuti untuk analis olahraga</span>
+              </li>
+            </ul>
+            
+            <h5 class="text-lg font-bold mb-3 text-cyan-300">
+              <span class="lang en">Data Sources</span>
+              <span class="lang id hidden">Sumber Data</span>
+            </h5>
+            <div class="space-y-3 mb-6">
+              <div class="flex items-center gap-3">
+                <div class="w-10 h-10 rounded-lg bg-blue-500/20 flex items-center justify-center">
+                  <i data-lucide="database" class="w-5 h-5 text-blue-400"></i>
+                </div>
+                <div>
+                  <p class="font-medium">FIFA Official Statistics</p>
+                  <p class="text-sm text-gray-400">Match results, team stats, player data</p>
+                </div>
+              </div>
+              
+              <div class="flex items-center gap-3">
+                <div class="w-10 h-10 rounded-lg bg-green-500/20 flex items-center justify-center">
+                  <i data-lucide="cloud" class="w-5 h-5 text-green-400"></i>
+                </div>
+                <div>
+                  <p class="font-medium">Sports Analytics APIs</p>
+                  <p class="text-sm text-gray-400">Real-time match data and statistics</p>
+                </div>
+              </div>
+            </div>
+            
+            <h5 class="text-lg font-bold mb-3 text-cyan-300">
+              <span class="lang en">Project Impact</span>
+              <span class="lang id hidden">Dampak Proyek</span>
+            </h5>
+            <div class="grid grid-cols-2 gap-4">
+              <div class="glass p-4 rounded-xl text-center">
+                <div class="text-3xl font-bold text-cyan-400 mb-2">85%</div>
+                <p class="text-sm text-gray-300 lang en">Data Accuracy</p>
+                <p class="text-sm text-gray-300 lang id hidden">Akurasi Data</p>
+              </div>
+              <div class="glass p-4 rounded-xl text-center">
+                <div class="text-3xl font-bold text-cyan-400 mb-2">24/7</div>
+                <p class="text-sm text-gray-300 lang en">Dashboard Availability</p>
+                <p class="text-sm text-gray-300 lang id hidden">Ketersediaan Dashboard</p>
+              </div>
+            </div>
+          </div>
+          
+          <!-- GitHub Link -->
+          <div class="text-center">
+            <a href="https://github.com/Agush01-ui/VisualisasiData-FIFAWomensWorldCup.git" 
+               target="_blank"
+               class="inline-flex items-center gap-3 px-6 py-3 glass rounded-lg font-medium hover:bg-cyan-500/20 transition">
+              <i data-lucide="github" class="w-5 h-5"></i>
+              <span class="lang en">View Complete Project on GitHub</span>
+              <span class="lang id hidden">Lihat Proyek Lengkap di GitHub</span>
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
 
 <!-- CONTACT -->
 <section id="contact" class="py-20 px-6 text-center">
@@ -974,6 +2368,355 @@ document.addEventListener('keydown', function(e) {
 
 // Initialize with English
 setLang('en');
+
+// PDF Modal Functions
+let currentZoom = 100;
+const pdfViewer = document.getElementById('pdfViewer');
+const zoomLevel = document.getElementById('zoomLevel');
+
+function viewPdfCertificate() {
+  const modal = document.getElementById('pdfModal');
+  const pdfUrl = 'Sertifikat.pdf';
+  
+  // Option 1: Direct embed (requires proper CORS headers on server)
+  pdfViewer.src = pdfUrl;
+  
+  // Option 2: Using PDF.js library (add this to head if using)
+  // pdfViewer.src = `https://mozilla.github.io/pdf.js/web/viewer.html?file=${encodeURIComponent(pdfUrl)}`;
+  
+  modal.classList.add('active');
+  document.body.style.overflow = 'hidden';
+  currentZoom = 100;
+  updateZoomDisplay();
+  
+  // Add loading indicator
+  pdfViewer.onload = function() {
+    pdfViewer.style.opacity = '1';
+  };
+  pdfViewer.style.opacity = '0.5';
+}
+
+function closePdfModal() {
+  const modal = document.getElementById('pdfModal');
+  modal.classList.remove('active');
+  document.body.style.overflow = 'auto';
+  // Clear PDF source to free memory
+  pdfViewer.src = '';
+}
+
+function zoomInPdf() {
+  if (currentZoom < 200) {
+    currentZoom += 10;
+    updateZoomLevel();
+  }
+}
+
+function zoomOutPdf() {
+  if (currentZoom > 50) {
+    currentZoom -= 10;
+    updateZoomLevel();
+  }
+}
+
+function updateZoomLevel() {
+  pdfViewer.style.transform = `scale(${currentZoom / 100})`;
+  pdfViewer.style.transformOrigin = 'center top';
+  updateZoomDisplay();
+}
+
+function updateZoomDisplay() {
+  zoomLevel.textContent = `${currentZoom}%`;
+}
+
+function openPdfFullscreen() {
+  if (pdfViewer.requestFullscreen) {
+    pdfViewer.requestFullscreen();
+  } else if (pdfViewer.webkitRequestFullscreen) {
+    pdfViewer.webkitRequestFullscreen();
+  } else if (pdfViewer.msRequestFullscreen) {
+    pdfViewer.msRequestFullscreen();
+  }
+}
+
+// Close PDF modal with Escape key
+document.addEventListener('keydown', function(e) {
+  if (e.key === 'Escape') {
+    if (document.getElementById('pdfModal').classList.contains('active')) {
+      closePdfModal();
+    }
+  }
+});
+
+// Close PDF modal when clicking outside
+document.getElementById('pdfModal').addEventListener('click', function(e) {
+  if (e.target === this) {
+    closePdfModal();
+  }
+});
+
+// Tools Proficiency Chart
+let proficiencyChart = null;
+let currentChartType = 'bar';
+
+// Data based on your expertise (sorted from highest to lowest)
+const toolsData = {
+  labels: ['Power BI', 'Python', 'SQL', 'Excel', 'PostgreSQL', 'Tableau'],
+  values: [95, 92, 90, 88, 85, 82],
+  colors: [
+    'linear-gradient(135deg, #f59e0b, #ea580c)', // Yellow to Orange
+    'linear-gradient(135deg, #3b82f6, #06b6d4)', // Blue to Cyan
+    'linear-gradient(135deg, #f97316, #dc2626)', // Orange to Red
+    'linear-gradient(135deg, #10b981, #059669)', // Green to Emerald
+    'linear-gradient(135deg, #60a5fa, #4f46e5)', // Blue to Indigo
+    'linear-gradient(135deg, #8b5cf6, #db2777)'  // Purple to Pink
+  ]
+};
+
+function initProficiencyChart() {
+  const ctx = document.getElementById('proficiencyChart').getContext('2d');
+  
+  // Hide loading
+  document.getElementById('chartLoading').style.display = 'none';
+  
+  // Create gradient backgrounds
+  const gradients = toolsData.colors.map(color => {
+    const gradient = ctx.createLinearGradient(0, 0, 0, 400);
+    if (color.includes('linear-gradient')) {
+      // Extract colors from gradient string
+      const matches = color.match(/#[0-9a-f]{6}/gi);
+      if (matches && matches.length >= 2) {
+        gradient.addColorStop(0, matches[0]);
+        gradient.addColorStop(1, matches[1]);
+      } else {
+        gradient.addColorStop(0, '#22d3ee');
+        gradient.addColorStop(1, '#0ea5e9');
+      }
+    }
+    return gradient;
+  });
+  
+  const chartConfig = {
+    type: currentChartType,
+    data: {
+      labels: toolsData.labels,
+      datasets: [{
+        label: 'Proficiency (%)',
+        data: toolsData.values,
+        backgroundColor: gradients,
+        borderColor: 'rgba(255, 255, 255, 0.2)',
+        borderWidth: 2,
+        borderRadius: 8,
+        hoverBackgroundColor: 'rgba(34, 211, 238, 0.8)',
+        hoverBorderColor: '#22d3ee',
+        hoverBorderWidth: 3
+      }]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      animation: {
+        duration: 1500,
+        easing: 'easeOutQuart'
+      },
+      plugins: {
+        legend: {
+          display: false
+        },
+        tooltip: {
+          backgroundColor: 'rgba(15, 23, 42, 0.95)',
+          titleColor: '#22d3ee',
+          bodyColor: '#e2e8f0',
+          borderColor: '#22d3ee',
+          borderWidth: 1,
+          padding: 12,
+          cornerRadius: 8,
+          displayColors: false,
+          callbacks: {
+            label: function(context) {
+              let label = context.dataset.label || '';
+              if (label) {
+                label += ': ';
+              }
+              label += context.parsed.y + '%';
+              return label;
+            }
+          }
+        }
+      },
+      scales: currentChartType === 'radar' || currentChartType === 'polarArea' ? {
+        r: {
+          beginAtZero: true,
+          max: 100,
+          ticks: {
+            stepSize: 20,
+            color: '#94a3b8',
+            backdropColor: 'transparent'
+          },
+          grid: {
+            color: 'rgba(255,255,255,0.1)'
+          },
+          pointLabels: {
+            color: '#e2e8f0',
+            font: {
+              size: 12
+            }
+          }
+        }
+      } : {
+        y: {
+          beginAtZero: true,
+          max: 100,
+          ticks: {
+            stepSize: 20,
+            color: '#94a3b8',
+            callback: function(value) {
+              return value + '%';
+            }
+          },
+          grid: {
+            color: 'rgba(255,255,255,0.1)'
+          }
+        },
+        x: {
+          ticks: {
+            color: '#e2e8f0',
+            font: {
+              size: 12
+            }
+          },
+          grid: {
+            color: 'rgba(255,255,255,0.05)'
+          }
+        }
+      }
+    }
+  };
+  
+  // Destroy previous chart if exists
+  if (proficiencyChart) {
+    proficiencyChart.destroy();
+  }
+  
+  // Create new chart
+  proficiencyChart = new Chart(ctx, chartConfig);
+}
+
+function changeChartType(type) {
+  currentChartType = type;
+  
+  // Update active button
+  document.querySelectorAll('.chart-type-btn').forEach(btn => {
+    btn.classList.remove('active-chart');
+  });
+  document.querySelector(`.chart-type-btn[data-type="${type}"]`).classList.add('active-chart');
+  
+  // Update icon
+  const icon = document.querySelector(`.chart-type-btn[data-type="${type}"] i`);
+  icon.setAttribute('data-lucide', getChartIcon(type));
+  lucide.createIcons();
+  
+  // Reinitialize chart
+  initProficiencyChart();
+}
+
+function getChartIcon(type) {
+  switch(type) {
+    case 'bar': return 'bar-chart-3';
+    case 'radar': return 'radar';
+    case 'polar': return 'circle';
+    default: return 'bar-chart-3';
+  }
+}
+
+// Initialize chart when page loads
+window.addEventListener('load', () => {
+  setTimeout(initProficiencyChart, 500);
+});
+
+// Add hover effect to tool items
+document.querySelectorAll('.tool-item').forEach(item => {
+  item.addEventListener('mouseenter', function() {
+    const tool = this.dataset.tool;
+    // You can add highlight effect to corresponding chart element here
+  });
+  
+  item.addEventListener('click', function() {
+    const tool = this.dataset.tool;
+    const index = toolsData.labels.findIndex(label => 
+      label.toLowerCase().replace(' ', '') === tool
+    );
+    
+    if (index !== -1) {
+      // Highlight the corresponding bar in chart
+      if (proficiencyChart) {
+        proficiencyChart.setActiveElements([{ datasetIndex: 0, index }]);
+        proficiencyChart.update();
+        
+        // Reset after 1.5 seconds
+        setTimeout(() => {
+          proficiencyChart.setActiveElements([]);
+          proficiencyChart.update();
+        }, 1500);
+      }
+    }
+  });
+});
+
+// Projects Modal Functions
+function openDashboardModal(projectId) {
+  const modal = document.getElementById('dashboardModal');
+  modal.classList.add('active');
+  document.body.style.overflow = 'hidden';
+  
+  // Update modal content based on project
+  if (projectId === 'project1') {
+    document.getElementById('dashboardTitle').textContent = 'FIFA Women\'s World Cup Dashboard';
+  }
+}
+
+function closeDashboardModal() {
+  const modal = document.getElementById('dashboardModal');
+  modal.classList.remove('active');
+  document.body.style.overflow = 'auto';
+}
+
+function openReportModal(projectId) {
+  const modal = document.getElementById('reportModal');
+  modal.classList.add('active');
+  document.body.style.overflow = 'hidden';
+}
+
+function closeReportModal() {
+  const modal = document.getElementById('reportModal');
+  modal.classList.remove('active');
+  document.body.style.overflow = 'auto';
+}
+
+// Close modals with Escape key
+document.addEventListener('keydown', function(e) {
+  if (e.key === 'Escape') {
+    if (document.getElementById('dashboardModal').classList.contains('active')) {
+      closeDashboardModal();
+    }
+    if (document.getElementById('reportModal').classList.contains('active')) {
+      closeReportModal();
+    }
+  }
+});
+
+// Close modals when clicking outside
+document.getElementById('dashboardModal').addEventListener('click', function(e) {
+  if (e.target === this) {
+    closeDashboardModal();
+  }
+});
+
+document.getElementById('reportModal').addEventListener('click', function(e) {
+  if (e.target === this) {
+    closeReportModal();
+  }
+});
+
 </script>
 
 </body>
