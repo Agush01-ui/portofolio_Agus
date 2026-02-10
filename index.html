@@ -2706,15 +2706,33 @@ const nameText = "Agus Saputra Hamzah";
 let nameIndex = 0;
 let isTypingDone = false;
 
+// Perbaikan fungsi typeName untuk clear element dulu
 function typeName() {
+  const typingElement = document.getElementById('typing-name');
+  
+  // Pastikan element kosong sebelum mulai
+  typingElement.innerHTML = '';
+  nameIndex = 0;
+  isTypingDone = false;
+  
+  // Tambahkan kelas animasi jika belum ada
+  typingElement.classList.add('typing-animation');
+  
+  // Mulai mengetik
+  typeCharacter();
+}
+
+// Fungsi rekursif untuk mengetik karakter
+function typeCharacter() {
   const typingElement = document.getElementById('typing-name');
   
   if (nameIndex < nameText.length) {
     typingElement.innerHTML += nameText.charAt(nameIndex);
     nameIndex++;
-    setTimeout(typeName, 100);
+    setTimeout(typeCharacter, 100); // Kecepatan mengetik: 100ms per karakter
   } else {
     isTypingDone = true;
+    // Hapus kursor berkedip setelah selesai
     setTimeout(() => {
       typingElement.classList.remove('typing-animation');
       typingElement.style.borderRight = 'none';
@@ -3870,6 +3888,20 @@ document.querySelectorAll('.tool-item').forEach(item => {
     }
   });
 });
+
+// Jalankan animasi mengetik nama ketika halaman dimuat
+document.addEventListener('DOMContentLoaded', function() {
+  setTimeout(typeName, 500); // Delay 500ms untuk efek lebih baik
+});
+
+// Start typing animation when everything is loaded
+window.onload = function() {
+  setTimeout(typeName, 300);
+};
+
+// Mulai animasi mengetik
+typeName();
+
 </script>
 
 </body>
