@@ -365,6 +365,31 @@
   box-shadow: 0 0 10px rgba(34, 211, 238, 0.3);
 }
 
+/* Loading spinner */
+#chartLoading {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(15, 23, 42, 0.7);
+  backdrop-filter: blur(5px);
+  border-radius: 12px;
+  z-index: 10;
+}
+
+.spinner {
+  width: 40px;
+  height: 40px;
+  border: 3px solid rgba(34, 211, 238, 0.3);
+  border-top: 3px solid #22d3ee;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
 /* Tool item hover effects */
 .tool-item {
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
@@ -3595,6 +3620,256 @@ document.getElementById('reportModal').addEventListener('click', function(e) {
 
 // Initialize with English
 setLang('en');
+
+// Tools Proficiency Chart
+let proficiencyChart = null;
+let currentChartType = 'bar';
+let chartInitialized = false;
+
+// Data based on your expertise (sorted from highest to lowest)
+const toolsData = {
+  labels: ['Power BI', 'Python', 'SQL', 'Excel', 'PostgreSQL', 'Tableau'],
+  values: [95, 92, 90, 88, 85, 82],
+  colors: [
+    'linear-gradient(135deg, #f59e0b, #ea580c)', // Yellow to Orange
+    'linear-gradient(135deg, #3b82f6, #06b6d4)', // Blue to Cyan
+    'linear-gradient(135deg, #f97316, #dc2626)', // Orange to Red
+    'linear-gradient(135deg, #10b981, #059669)', // Green to Emerald
+    'linear-gradient(135deg, #60a5fa, #4f46e5)', // Blue to Indigo
+    'linear-gradient(135deg, #8b5cf6, #db2777)'  // Purple to Pink
+  ]
+};
+
+function initProficiencyChart() {
+  const canvas = document.getElementById('proficiencyChart');
+  if (!canvas) {
+    console.error('Canvas element not found');
+    return;
+  }
+  
+  const ctx = canvas.getContext('2d');
+  const loadingElement = document.getElementById('chartLoading');
+  
+  // Show loading initially
+  if (loadingElement) {
+    loadingElement.style.display = 'flex';
+  }
+  
+  // Clear any existing chart
+  if (proficiencyChart) {
+    proficiencyChart.destroy();
+  }
+  
+  // Create gradient backgrounds
+  const gradients = toolsData.colors.map(color => {
+    const gradient = ctx.createLinearGradient(0, 0, 0, canvas.height);
+    if (color.includes('linear-gradient')) {
+      // Extract colors from gradient string
+      const matches = color.match(/#[0-9a-f]{6}/gi);
+      if (matches && matches.length >= 2) {
+        gradient.addColorStop(0, matches[0]);
+        gradient.addColorStop(1, matches[1]);
+      } else {
+        gradient.addColorStop(0, '#22d3ee');
+        gradient.addColorStop(1, '#0ea5e9');
+      }
+    }
+    return gradient;
+  });
+  
+  const chartConfig = {
+    type: currentChartType,
+    data: {
+      labels: toolsData.labels,
+      datasets: [{
+        label: 'Proficiency (%)',
+        data: toolsData.values,
+        backgroundColor: gradients,
+        borderColor: 'rgba(255, 255, 255, 0.2)',
+        borderWidth: 2,
+        borderRadius: 8,
+        hoverBackgroundColor: 'rgba(34, 211, 238, 0.8)',
+        hoverBorderColor: '#22d3ee',
+        hoverBorderWidth: 3
+      }]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      animation: {
+        duration: 1000,
+        easing: 'easeOutQuart',
+        onComplete: function() {
+          // Hide loading when animation completes
+          if (loadingElement) {
+            loadingElement.style.display = 'none';
+          }
+        }
+      },
+      plugins: {
+        legend: {
+          display: false
+        },
+        tooltip: {
+          backgroundColor: 'rgba(15, 23, 42, 0.95)',
+          titleColor: '#22d3ee',
+          bodyColor: '#e2e8f0',
+          borderColor: '#22d3ee',
+          borderWidth: 1,
+          padding: 12,
+          cornerRadius: 8,
+          displayColors: false,
+          callbacks: {
+            label: function(context) {
+              let label = context.dataset.label || '';
+              if (label) {
+                label += ': ';
+              }
+              label += context.parsed.y + '%';
+              return label;
+            }
+          }
+        }
+      },
+      scales: currentChartType === 'radar' || currentChartType === 'polarArea' ? {
+        r: {
+          beginAtZero: true,
+          max: 100,
+          ticks: {
+            stepSize: 20,
+            color: '#94a3b8',
+            backdropColor: 'transparent'
+          },
+          grid: {
+            color: 'rgba(255,255,255,0.1)'
+          },
+          pointLabels: {
+            color: '#e2e8f0',
+            font: {
+              size: 12
+            }
+          }
+        }
+      } : {
+        y: {
+          beginAtZero: true,
+          max: 100,
+          ticks: {
+            stepSize: 20,
+            color: '#94a3b8',
+            callback: function(value) {
+              return value + '%';
+            }
+          },
+          grid: {
+            color: 'rgba(255,255,255,0.1)'
+          }
+        },
+        x: {
+          ticks: {
+            color: '#e2e8f0',
+            font: {
+              size: 12
+            }
+          },
+          grid: {
+            color: 'rgba(255,255,255,0.05)'
+          }
+        }
+      }
+    }
+  };
+  
+  // Set chart type
+  if (currentChartType === 'polar') {
+    chartConfig.type = 'polarArea';
+  }
+  
+  // Create new chart
+  proficiencyChart = new Chart(ctx, chartConfig);
+  
+  // Set flag
+  chartInitialized = true;
+  
+  // Fallback: hide loading after 2 seconds
+  setTimeout(() => {
+    if (loadingElement && loadingElement.style.display !== 'none') {
+      loadingElement.style.display = 'none';
+    }
+  }, 2000);
+}
+
+function changeChartType(type) {
+  currentChartType = type;
+  
+  // Update active button
+  document.querySelectorAll('.chart-type-btn').forEach(btn => {
+    btn.classList.remove('active-chart');
+  });
+  document.querySelector(`.chart-type-btn[data-type="${type}"]`).classList.add('active-chart');
+  
+  // Show loading
+  const loadingElement = document.getElementById('chartLoading');
+  if (loadingElement) {
+    loadingElement.style.display = 'flex';
+  }
+  
+  // Reinitialize chart
+  initProficiencyChart();
+}
+
+function getChartIcon(type) {
+  switch(type) {
+    case 'bar': return 'bar-chart-3';
+    case 'radar': return 'radar';
+    case 'polar': return 'circle';
+    default: return 'bar-chart-3';
+  }
+}
+
+// Initialize chart when page loads
+document.addEventListener('DOMContentLoaded', function() {
+  // Wait for everything to load
+  setTimeout(() => {
+    if (!chartInitialized) {
+      initProficiencyChart();
+    }
+  }, 500);
+});
+
+// Also initialize when window loads
+window.addEventListener('load', function() {
+  if (!chartInitialized) {
+    initProficiencyChart();
+  }
+});
+
+// Add hover effect to tool items
+document.querySelectorAll('.tool-item').forEach(item => {
+  item.addEventListener('mouseenter', function() {
+    const tool = this.dataset.tool;
+    // You can add highlight effect to corresponding chart element here
+  });
+  
+  item.addEventListener('click', function() {
+    const tool = this.dataset.tool;
+    const index = toolsData.labels.findIndex(label => 
+      label.toLowerCase().replace(' ', '') === tool
+    );
+    
+    if (index !== -1 && proficiencyChart) {
+      // Highlight the corresponding bar in chart
+      proficiencyChart.setActiveElements([{ datasetIndex: 0, index }]);
+      proficiencyChart.update();
+      
+      // Reset after 1.5 seconds
+      setTimeout(() => {
+        proficiencyChart.setActiveElements([]);
+        proficiencyChart.update();
+      }, 1500);
+    }
+  });
+});
 </script>
 
 </body>
